@@ -10,27 +10,45 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
+
+        if Self::check_description(&description) && Self::check_status(&status) && Self::check_title(&title) {
+            Ticket {
+                title,
+                description,
+                status,
+            }
+        } else{
+            panic!("We will never reach here");
+        }
+    }
+
+    fn check_title(title: &String) -> bool {
+        println!("Checking title: {}", title);
         if title.is_empty() {
             panic!("Title cannot be empty");
         }
         if title.len() > 50 {
             panic!("Title cannot be longer than 50 characters");
         }
+        true
+    }
+
+    fn check_description(description: &String) -> bool {
         if description.is_empty() {
             panic!("Description cannot be empty");
         }
         if description.len() > 500 {
+            println!("Found overly long");
             panic!("Description cannot be longer than 500 characters");
         }
+        true
+    }
+
+    fn check_status(status: &String) -> bool {
         if status != "To-Do" && status != "In Progress" && status != "Done" {
             panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
         }
-
-        Ticket {
-            title,
-            description,
-            status,
-        }
+        true
     }
 
     pub fn title(&self) -> &String {
@@ -39,6 +57,24 @@ impl Ticket {
 
     pub fn description(&self) -> &String {
         &self.description
+    }
+
+    pub fn set_status(&mut self, status: String){
+        if Self::check_status(&status) {
+            self.status = status.clone();
+        }
+    }
+
+    pub fn set_title(&mut self, title: String){
+        if Self::check_title(&title) {
+            self.title = title;
+        }
+    }
+
+    pub fn set_description(&mut self, description: String){
+        if Self::check_description(&description) {
+            self.description = description;
+        } 
     }
 
     pub fn status(&self) -> &String {
