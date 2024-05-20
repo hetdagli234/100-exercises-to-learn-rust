@@ -12,13 +12,19 @@
 // interested in learning more about it.
 // You don't have to though: it's perfectly okay to write three separate
 // implementations manually. Venture further only if you're curious.
-trait Power {
-    fn power(&self, n: u16) -> u32;
+use num::pow::Pow;
+
+trait Power<T> {
+    fn power(&self, n: T) -> Self;
 }
 
-impl Power for u32 {
-    fn power(&self, n: u16) -> u32 {
-        *self as u32 * n as u32
+impl<T, U> Power<U> for T
+where
+    T: Pow<U, Output = T> + Copy,
+    U: Copy,
+{
+    fn power(&self, n: U) -> Self {
+        self.pow(n)
     }
 }
 #[cfg(test)]
